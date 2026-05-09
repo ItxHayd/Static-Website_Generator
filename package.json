@@ -1,0 +1,20 @@
+{
+  "name": "static-web-generator",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "serve ./public"
+  },
+  "devDependencies": {
+    "vite": "^8.0.10"
+  },
+  "dependencies": {
+    "ejs": "^5.0.2",
+    "fs-extra": "^11.3.5",
+    "glob": "^13.0.6"
+  }
+}
