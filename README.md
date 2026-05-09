@@ -34,7 +34,7 @@ project-root/
 │   ├── partials/     # Reusable components
 │   └── assets/       # CSS, JS, images
 │
-├── dist/             # Generated static site
+├── public/             # Generated static site
 ├── build.js          # Main build script
 └── package.json
 ```
@@ -72,7 +72,7 @@ This will:
 * `glob` scans all page files inside `/src/pages`
 * `promisify` converts callback-based file functions into async/await
 * Each `.ejs` file is rendered into `.html`
-* Output is saved in `/dist` as a fully static site
+* Output is saved in `/public` as a fully static site
 
 ---
 
