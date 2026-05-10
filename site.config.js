@@ -1,9 +1,8 @@
-import projects from './src/data/projects'
 
-module.exports = {
+export default {
   site: {
     title: 'NanoGen',
     description: 'Micro Static Site Generator in Node.js',
-    projects,
+    
   },
 }
