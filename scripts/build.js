@@ -1,53 +1,64 @@
-import fse from "fs-extra" 
-import { promisify } from "util"
-import path from "path"
-import ejs from "ejs"
-import {glob} from "glob"
-import { config } from "../site.config.js"
-
-const globP = promisify(glob);
-const ejsRenderFile = promisify(ejs.renderFile);
+import fse from "fs-extra";
+import path from "path";
+import ejs from "ejs";
+import { glob } from "glob";
+import { marked } from "marked";
+import fm from "front-matter";
+import config from "../site.config.js";
 
 const srcPath = "./src";
 const distPath = "./public";
 
+await fse.emptyDir(distPath);
+await fse.copy(`${srcPath}/assets`, `${distPath}/assets`);
 
-fse.emptydirSync(distPath);
+const files = await glob('**/*.@(md|ejs|html)', {
+  cwd: `${srcPath}/pages`
+});
 
-fse.copy(`${srcPath}/assets`,`${distPath}/assets`);
+for (const file of files) {
+  const fileData = path.parse(file);
+  const destPath = path.join(distPath, fileData.dir);
 
+  await fse.mkdirs(destPath);
 
+  const data = await fse.readFile(`${srcPath}/pages/${file}`, "utf-8");
 
-globP('**/*.ejs',{cwd:`${srcPath}/pages`}) // get files
-    .then((files)=>{
-        files.forEach((file) => {
-            const fileData = path.parse(file);
-            const destPath = path.join(distPath,fileData.dir);
+  const pageData = fm(data);
 
-            fse.mkdirs(destPath)
-                .then(()=>{
-                    return ejsRenderFile(  //get pageContent from files
-                        `${srcPath}/pages/${file}`,
-                        Object.assign({},config)
-                    )
-                })
-                .then((pageContents)=>{
-                    return ejsRenderFile(
-                        `${srcPath}/layout.ejs`,
-                        Object.assign({}, config, { body: pageContents })
-                    )
-                })
-                .then((layoutContent)=>{
-                    fse.write(
-                        `${destPath}/${fileData.name}.html`,
-                        layoutContent
-                    )
-                })
-                .catch(error=>{
-                    console.log(error);
-                })
-    });
-})
-.catch(error=>{
-    console.log(error);
-})
+    const templateConfig = {
+    ...config,
+    ...pageData.attributes,
+    page: pageData.attributes
+    };
+
+  let pageContent;
+
+  switch (fileData.ext) {
+    case ".md":
+      pageContent = marked.parse(pageData.body);
+      break;
+
+    case ".ejs":
+      pageContent = ejs.render(pageData.body, templateConfig);
+      break;
+
+    default:
+      pageContent = pageData.body;
+  }
+
+  const layout = pageData.attributes.layout || "default";
+
+  const layoutContent = await ejs.renderFile(
+    `${srcPath}/layouts/${layout}.ejs`,
+    {
+      ...templateConfig,
+      body: pageContent
+    }
+  );
+
+  await fse.writeFile(
+    `${destPath}/${fileData.name}.html`,
+    layoutContent
+  );
+}

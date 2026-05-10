@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title><%= page.title %></title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #f8fafc;
+    }
+
+    nav {
+      padding: 20px;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <strong><%= siteName %></strong>
+  </nav>
+
+  <div class="container">
+    <h1><%= page.title %></h1>
+    <%- body %>
+  </div>
+</body>
+</html>
