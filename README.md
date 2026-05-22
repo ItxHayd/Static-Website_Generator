@@ -84,6 +84,13 @@ This will:
 
 ---
 
+## ScreenShot
+
+<img width="1366" height="677" alt="Static-gen" src="https://github.com/user-attachments/assets/ffee8f2f-b4b7-463e-8a6c-95714a570264" />
+
+
+---
+
 ## 📈 Use Cases
 
 * Personal portfolios
