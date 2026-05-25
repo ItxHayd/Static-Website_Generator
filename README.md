@@ -56,6 +56,7 @@ npm install
 ### Build the site
 
 ```bash
+node .scripts/build.js
 npm run serve
 ```
 
